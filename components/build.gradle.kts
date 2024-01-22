@@ -1,12 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
-val secrets = Properties().apply {
-    load(FileInputStream(File(rootProject.rootDir, "secrets.properties")))
-}
-val USERNAME = secrets.getProperty("USERNAME")
-val TOKEN = secrets.getProperty("TOKEN")
-
 plugins {
     `maven-publish`
     id("com.android.library")
@@ -46,25 +37,23 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "TheBrownFoxxComponents"
-            url = uri("https://maven.pkg.github.com/hamthelegend/thebrownfoxx-components")
-            credentials {
-                username = USERNAME
-                password = TOKEN
-            }
-        }
-    }
     publications {
-        register<MavenPublication>("gpr") {
+        register<MavenPublication>("release") {
             groupId = "com.thebrownfoxx"
             artifactId = "components"
             version = "1.0.0"
-            artifact("$buildDir/outputs/aar/components-release.aar")
+
+            afterEvaluate {
+                from(components["release"])
+            }
         }
     }
 }

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Components"
+rootProject.name = "Extensions"
 include(":components")
