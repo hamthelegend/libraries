@@ -1,10 +1,17 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val secrets = Properties().apply {
+    load(FileInputStream(File(rootProject.rootDir, "secrets.properties")))
+}
+val USERNAME = secrets.getProperty("USERNAME")
+val TOKEN = secrets.getProperty("TOKEN")
+
 plugins {
     `maven-publish`
     id("com.android.library")
     kotlin("android")
 }
-val USERNAME by extra("hamthelegend")
-val TOKEN by extra("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")
 
 android {
     namespace = "com.thebrownfoxx.components"
@@ -47,8 +54,8 @@ publishing {
             name = "TheBrownFoxxComponents"
             url = uri("https://maven.pkg.github.com/hamthelegend/thebrownfoxx-components")
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                username = USERNAME
+                password = TOKEN
             }
         }
     }
